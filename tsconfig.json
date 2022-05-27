@@ -13,7 +13,9 @@
       "noUnusedLocals": true,
       "strictNullChecks": true,
       "forceConsistentCasingInFileNames": true,
-      "types": [],
+      "types": [
+        "vite/client"
+      ],
       "paths": {
         "~/*": ["playground/*"],
         "@yanyu-fe/monaco-editor-vue": ["src/index.ts"],

@@ -1,6 +1,6 @@
-import type { App, Plugin } from 'vue-demi'
-import MonacoEditor from './components/MonacoEditor.vue'
-
+import type { App, Plugin } from 'vue'
+import MonacoEditor from './components/monaco-editor'
+import './style/index.css'
 MonacoEditor.install = (app: App) => {
   app.component(MonacoEditor.name, MonacoEditor)
 }
