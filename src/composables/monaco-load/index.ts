@@ -3,6 +3,7 @@ import { isRef, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import type { MonacoEditorProps } from '../../components/props'
 import { useMonacoThemes } from '../index'
+import './custom-monaco'
 export type MaybeRef<T> = T | Ref<T>
 export type MonacoEditorCreateType = ReturnType< typeof monaco.editor.create>
 export type MonacoEditorCreateDiffType = ReturnType< typeof monaco.editor.createDiffEditor>
@@ -44,13 +45,13 @@ export function useMonacoLoad(
     // 如果有值去自动格式化
     if (myDom) {
       if (isDiff) {
-        monaco.editor.createDiffEditor(myDom, {
+        editor.value = monaco.editor.createDiffEditor(myDom, {
           ...myOptions,
           ...options,
         })
       }
       else {
-        monaco.editor.create(myDom, {
+        editor.value = monaco.editor.create(myDom, {
           ...myOptions,
           ...options,
         })
@@ -69,10 +70,16 @@ export function useMonacoLoad(
 }
 function useStandaloneOptionsForProps(props: MonacoEditorProps, editor?: MonacoLoadCallback['editor']): void {
   watchEffect(() => {
-    const options: IStandaloneEditorConstructionOptions = {
-      theme: props.theme ?? 'mist-dark',
-      language: props.language ?? 'javascript',
+    const model = editor?.value?.getModel()
+    if (model) {
+      if (props.language) {
+        // 语言发生变化
+        monaco.editor.setModelLanguage(model, props.language)
+      }
+      if (props.theme) {
+        // 设置为只读
+        monaco.editor.setTheme(props.theme ?? 'mist-dark')
+      }
     }
-    editor?.value?.updateOptions(options)
   })
 }

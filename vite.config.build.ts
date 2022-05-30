@@ -10,9 +10,18 @@ export default defineConfig({
     dts(),
   ],
   build: {
+    rollupOptions: {
+      external: [
+        /^monaco-editor/,
+      ],
+      output: {
+        exports: 'named',
+      },
+    },
     lib: {
       entry: 'src/index.ts',
-      formats: ['es', 'cjs', 'umd'],
+      formats: ['es', 'cjs'],
+      name: 'monacoEditor',
     },
   },
 })
